@@ -1,0 +1,63 @@
+
+
+
+/*Plugin Style */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+.cansoft-property-calculator-wrapper *{margin:0;padding: 0;}
+.cansoft-property-calculator-wrapper{width:100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    border: 1px solid #EEE;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+.cansoft-property-calculator-wrapper .calculator-left {
+	padding: 20px;
+    color: #2c5282;
+}
+.cansoft-property-calculator-wrapper .calculator-right{padding: 30px 15px;background-color: #f7fafc;}
+
+.cansoft-property-calculator-wrapper .calculator-left label {
+	margin-bottom: 10px;
+	display: block;
+}
+.cansoft-property-calculator-wrapper .calculator-left p{margin-bottom: 10px}
+.cansoft-property-calculator-wrapper .calculator-input {
+    
+  box-sizing: border-box;
+	border-radius: 5px;
+	background: #fff;
+	border: 1px solid #ccc;
+	outline: none;
+	padding: 6px;
+	width: 100%;
+	font-size: 17px;
+}
+
+.cansoft-property-calculator-wrapper .calculator-submit-button {
+	border: none;
+	padding: 8px 15px;
+	background: #575757;
+	color: #FFF;
+	font-size: 16px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+.cansoft-property-calculator-wrapper .calculator-submit-button:hover{
+    background:#000;
+}
+
+.cansoft-property-calculator-wrapper .calculator-right{text-align: center}
+.cansoft-property-calculator-wrapper .calculator-result-box {
+	display: flex;
+	flex-direction: column;
+	border-radius: 8px;
+	border: 1px solid rgb(189, 202, 219);
+	background-color: white;
+	box-shadow: rgba(23, 25, 28, 0.3) 1px 1px 3px;
+	padding: 15px 20px;
+	text-align: center;
+	max-width: 250px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}

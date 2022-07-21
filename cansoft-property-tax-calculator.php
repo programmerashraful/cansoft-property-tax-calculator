@@ -7,7 +7,7 @@
 /*
     Plugin Name: Cansoft Property  Tax Calculator
     Plugin Url: https://github.com/programmerashraful/cansoft-property-tax-calculator
-    Description:  This  is a custom plugin for property tax calculator for canada.
+    Description:  This  is a custom plugin for property tax calculator for canada. this calculater will show by adding a shortcode like ([property_calculator]) or ([property_calculator p_value=50000])
     Author Name:  Ashraful Islam
     Author URI: https://github.com/programmerashraful
     License: Update Letter
@@ -25,6 +25,7 @@ if( ! function_exists('add_action') ){
     exit();
 }
 
+
 class CansoftPropertyTaxCalculator{
     
     // Constructor
@@ -36,8 +37,14 @@ class CansoftPropertyTaxCalculator{
     
     function activate(){
         // Generated a CPT
+        $this->registerAreaPostType();
+        $this->registerAreaProvince();
         // Flash rewrite rolls
         flush_rewrite_rules();
+    }
+    
+    function register(){
+        add_action('wp_enqueue_scripts', array($this, 'enqueue'));
     }
     
     function deactivate(){
@@ -51,7 +58,10 @@ class CansoftPropertyTaxCalculator{
         array(
           'labels' => array(
             'name' => __( 'Cities' ),
-            'singular_name' => __( 'City' )
+            'singular_name' => __( 'City' ),
+            'add_new_item' => __( 'Add City' ),
+            'add_new' => __( 'Add City' ),
+            'edit_item' => __( 'Edit City' ),
           ),
           'public' 		=> true,
           'has_archive' => true,
@@ -92,9 +102,17 @@ class CansoftPropertyTaxCalculator{
         
     }
     
-    function addCustomField(){
-        
+    
+    
+    
+    function enqueue(){
+        //enqueue all our script
+        wp_register_style('property-tax-css', plugins_url('/assets/style.css', __FILE__));
+		wp_enqueue_style('property-tax-css');
+        wp_enqueue_script('property-tax-vue-js', plugins_url('/assets/vue.js', __FILE__), array(), '1.0', true);
+        wp_enqueue_script('property-tax-script', plugins_url('/assets/script.js', __FILE__), array(), '1.0', true);
     }
+    
     
     function uninstall(){
         // Delate CPT
@@ -105,6 +123,7 @@ class CansoftPropertyTaxCalculator{
 // if class exists
 if(class_exists('CansoftPropertyTaxCalculator')){
     $taxCalculator = new CansoftPropertyTaxCalculator();
+    $taxCalculator->register();
 }
 
 
@@ -113,3 +132,11 @@ register_activation_hook( __FILE__, array($taxCalculator, 'activate'));
 
 // Deactivation
 register_deactivation_hook( __FILE__, array($taxCalculator, 'deactivate'));
+
+
+
+
+include( plugin_dir_path( __FILE__ ) . 'custom-meta-box.php');
+//include( plugin_dir_path( __FILE__ ) . 'post-query.php');
+include( plugin_dir_path( __FILE__ ) . 'short-code.php');
+
