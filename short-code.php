@@ -59,19 +59,19 @@ function cansoft_property_calculator($atts){
                    <input type="number" id="property_value" placeholder="0.00" step="1" min="0" inputmode="numeric" class="calculator-input" value="'.$p_value.'">
                </p>
                <p>
-                   <label for="province">Province</label>
-                   <select id="province" class="calculator-input">
+                   <label for="calculater_province">Province</label>
+                   <select id="calculater_province" class="calculator-input">
                        '.$province_options.'
                     </select>
                </p>
                <p>
-                   <label for="city">City</label>
-                   <select id="city" class="calculator-input">
+                   <label for="calculater_city">City</label>
+                   <select id="calculater_city" class="calculator-input">
                        '.$city_options.'
                     </select>
                </p>
                <p>
-                    <button class="calculator-submit-button">
+                    <button id="calculator_submit" class="calculator-submit-button">
                         Calculate
                     </button>
                </p>
@@ -79,11 +79,11 @@ function cansoft_property_calculator($atts){
            <div class="calculator-right">
                <div class="calculator-result-box">
                    <p>'.$value_title.'</p>
-                   <h1 class="displa_property_value">$'.$first_property_value.'</h1>
+                   <h1 class="displa_property_value">$<span>'.$first_property_value.'</span></h1>
                </div>
                <div class="calculator-result-box">
                    <p>'.$rate_title.'</p>
-                   <h1 class="display_property_rate">'.$first_property_rate.' %</h1>
+                   <h1 class="display_property_rate"> <span>'.$first_property_rate.'</span> %</h1>
                </div>
            </div>
        </div>

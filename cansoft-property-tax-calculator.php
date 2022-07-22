@@ -162,9 +162,9 @@ class CansoftPropertyTaxCalculator{
                         $new_cit = [];
                         $new_cit=[
                             'province_id'=>$province['term_id'],
-                            'citiy_id'=>$city->ID,
+                            'city_id'=>$city->ID,
                             'city_name'=>$city->post_title,
-                            'text_rate'=>get_post_meta($city->ID, 'tax_rate', true),
+                            'tax_rate'=>get_post_meta($city->ID, 'tax_rate', true),
                             'tax_rate_primary'=>get_post_meta($city->ID, 'tax_rate_primary', true),
                             'primary_residence'=>get_post_meta($city->ID, 'primary_residence', true),
                         ];
