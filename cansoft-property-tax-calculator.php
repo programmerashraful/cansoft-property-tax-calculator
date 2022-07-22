@@ -32,7 +32,8 @@ class CansoftPropertyTaxCalculator{
     
     function  __construct(){
         add_action('init', array($this, 'registerAreaPostType'));
-        add_action('init', array($this, 'registerAreaProvince'));
+        add_action('init', array($this, 'registerAreaProvince'), 10);
+        
     }
     
     function activate(){
@@ -75,6 +76,8 @@ class CansoftPropertyTaxCalculator{
     
     function registerAreaProvince(){
         // Making a custom taxonomy for province
+        
+        
         $labels = array(
             'name'              => _x( 'Province', 'Province', 'cansoft-property' ),
             'singular_name'     => _x( 'Province', 'Province', 'cansoft-property' ),
@@ -102,6 +105,78 @@ class CansoftPropertyTaxCalculator{
         
     }
     
+    function load_terms( $taxonomy ){
+        global $wpdb;
+        $query = "SELECT DISTINCT 
+                   t.name, t.term_id
+                  FROM
+                   {$wpdb->terms} t 
+                  INNER JOIN 
+                   {$wpdb->term_taxonomy} tax 
+                  ON 
+                   tax.term_id = t.term_id
+                  WHERE 
+                   ( tax.taxonomy = '{$taxonomy}')";                     
+        $result = $wpdb->get_results( $query , ARRAY_A );
+
+        return $result;                 
+    }
+    
+    
+    
+    function getCitiesByProvince($province){
+        $args = array(
+        'post_type'        => 'cansoft_city',
+        'orderby'         => 'menu_order',
+        'order'           => 'ASC',
+        'post_status'     => 'publish',
+        'posts_per_page'  => -1,
+        'tax_query' => array(
+            array (
+                'taxonomy' => 'cansoft_province',
+                'field' => 'term_id',
+                'terms' => $province,
+            )
+        ),
+        'suppress_filters' => true );
+
+        
+        return $newspress_query = get_posts($args);
+    }
+    
+    
+    
+    function jsonObjectOfCities(){
+        $provinces = $this->load_terms('cansoft_province');
+        $provinces_cities = array();
+        $new_obj=array();
+        $new_city = array();
+        if($provinces){
+            foreach($provinces as $province){
+                
+                $provinces_cities['province_id_'.$province['term_id']]['cities'] = [];
+                $cities = $this->getCitiesByProvince($province['term_id']);
+                
+                if($cities){
+                    foreach($cities as $city){
+                        $new_cit = [];
+                        $new_cit=[
+                            'province_id'=>$province['term_id'],
+                            'citiy_id'=>$city->ID,
+                            'city_name'=>$city->post_title,
+                            'text_rate'=>get_post_meta($city->ID, 'tax_rate', true),
+                            'tax_rate_primary'=>get_post_meta($city->ID, 'tax_rate_primary', true),
+                            'primary_residence'=>get_post_meta($city->ID, 'primary_residence', true),
+                        ];
+                        
+                        $provinces_cities['province_id_'.$province['term_id']]['cities']['city_id_'.$city->ID ] = $new_cit;
+                    }
+                }
+            }
+        }
+        return $provinces_cities;
+    }
+
     
     
     
@@ -109,7 +184,8 @@ class CansoftPropertyTaxCalculator{
         //enqueue all our script
         wp_register_style('property-tax-css', plugins_url('/assets/style.css', __FILE__));
 		wp_enqueue_style('property-tax-css');
-        wp_enqueue_script('property-tax-vue-js', plugins_url('/assets/vue.js', __FILE__), array(), '1.0', true);
+        wp_enqueue_script('jquery');
+        //wp_enqueue_script('property-tax-vue-js', plugins_url('/assets/vue.js', __FILE__), array(), '1.0', true);
         wp_enqueue_script('property-tax-script', plugins_url('/assets/script.js', __FILE__), array(), '1.0', true);
     }
     
@@ -118,6 +194,8 @@ class CansoftPropertyTaxCalculator{
         // Delate CPT
         // Delete all the plugins data form database
     }
+    
+   
 }
 
 // if class exists
@@ -137,6 +215,5 @@ register_deactivation_hook( __FILE__, array($taxCalculator, 'deactivate'));
 
 
 include( plugin_dir_path( __FILE__ ) . 'custom-meta-box.php');
-//include( plugin_dir_path( __FILE__ ) . 'post-query.php');
 include( plugin_dir_path( __FILE__ ) . 'short-code.php');
 
