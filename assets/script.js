@@ -1,12 +1,12 @@
 (function($){
 
-    if(!$("#calculator-app").length){
-        return;
-    }
-    
     
     $(document).ready(function(){
         
+        if(!$("#calculator-app").length){
+            return;
+        }
+    
         
         function listCities(calculator_data, province_id){
             let cities = calculator_data['province_id_'+province_id].cities;
@@ -63,5 +63,42 @@
     });
     
 
+    //ontario tax calculator
+    $(document).ready(function(){
+        
+        if(!$("#ontario_sales_tax_calculator").length){
+            return;
+        }
+        
+        function calculate(){
+            let ontario_sale_tax_amount = $('#ontario_sale_tax_amount').val();
+            let ontario_sale_tax_parcent = $('#ontario_sale_tax_parcent').val();
+            let display_parcent = $('.display_parcent');
+            let display_parcent_rate = $('.display_parcent_rate');
+            let ontario_sale_tax_amount_with_tax = $('.ontario_sale_tax_amount_with_tax');
+            let parcent_rate = 0;
+            let total_amount = 0;
+            
+            display_parcent.html(ontario_sale_tax_parcent);
+            parcent_rate = Number(ontario_sale_tax_amount) * Number(ontario_sale_tax_parcent) / 100;
+            display_parcent_rate.html(parcent_rate);
+            total_amount = Number(ontario_sale_tax_amount) + parcent_rate;
+            ontario_sale_tax_amount_with_tax.html('$'+total_amount);
+        }
+        
+        $('#ontario_sale_tax_amount').on('change', function() {
+            calculate();
+        });
+        $('#ontario_sale_tax_parcent').on('change', function() {
+            calculate();
+        });
+        $('#ontario_sale_tax_calculator_submit').on('click', function() {
+            calculate();
+        });
+        $("#ontario_sale_tax_amount").keyup(function(){
+          calculate();
+        });
+        
+    });
      
 })(jQuery);

@@ -93,4 +93,77 @@ function cansoft_property_calculator($atts){
 add_shortcode ('property_calculator', 'cansoft_property_calculator' );
 
 
+
+
+
+
+
+// Shortcode for Ontario sale tax calculator
+function cansoft_ontario_sale_tax_calculator($atts){
+    global $taxCalculator;
+	extract( shortcode_atts(array (
+		'p_value' => 1000,
+	), $atts, 'ontario_sale_tax_calculator' ) );
+    
+    $data=null;
+    $sale_rate = 0;
+    $total = 0;
+    $sale_rate = $p_value * 13 / 100;
+    $total = $p_value + $sale_rate;
+    $data.='
+        
+   
+       <div class="ontario_sales_tax_calculator" id="ontario_sales_tax_calculator">
+           <table class="table_responsive no_border">
+               <tr class="gray_bg">
+                   <td style="min-width: 60%;">Amount without taxes</td>
+                   <td>
+                       <input type="number" min="0" value="'.$p_value.'" name="ontario_sale_tax_amount" class="calculator-input" id="ontario_sale_tax_amount">
+                   </td>
+               </tr>
+               <tr>
+                   <td>+ Rate type</td>
+                   <td>
+                       <select name="ontario_sale_tax_parcent" class="calculator-input" id="ontario_sale_tax_parcent">
+                           <optgroup label="General rate">
+                              <option value="13" selected="">13%</option>
+                              <option value="5">5% Federal portion of the HST rate (ex: eligible first nations people, children\'s goods, books)</option>
+                              <option value="8">8% Provincial portion of the HST rate</option>
+                           </optgroup>
+                        </select>
+                   </td>
+               </tr>
+               <tr class="gray_bg">
+                   <td>HST (<spane class="display_parcent">13</spane>%)</td>
+                   <td>
+                       <span class="ontario_sale_tax_parcent_amount"><spane class="display_parcent_rate">'.$sale_rate.'</spane></span>
+                   </td>
+               </tr>
+               <tr>
+                   <td>=</td>
+                   <td></td>
+               </tr>
+               <tr class="gray_bg">
+                   <td>Amount with taxes</td>
+                   <td >
+                       <span class="ontario_sale_tax_amount_with_tax">$'.$total.'</span>
+                   </td>
+               </tr>
+               <tr>
+                   <td></td>
+                   <td>
+                       <button id="ontario_sale_tax_calculator_submit" class="calculator-submit-button">
+                            Calculate
+                        </button>
+                   </td>
+               </tr>
+           </table>
+       </div>
+   
+    ';
+    return $data;
+}
+add_shortcode ('ontario_sale_tax_calculator', 'cansoft_ontario_sale_tax_calculator' );
+
+
 ?>

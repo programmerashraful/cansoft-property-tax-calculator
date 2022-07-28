@@ -5,9 +5,9 @@
 */
 
 /*
-    Plugin Name: Cansoft Property  Tax Calculator
+    Plugin Name: Cansoft  Calculators
     Plugin Url: https://github.com/programmerashraful/cansoft-property-tax-calculator
-    Description:  This  is a custom plugin for property tax calculator for canada. this calculater will show by adding a shortcode like ([property_calculator]) or ([property_calculator p_value=50000])
+    Description:  This  is a custom plugin for property tax calculator for canada. this calculater will show by adding a shortcode like ([property_calculator]) or ([property_calculator p_value=50000 value_title='Test' rate_title='test'])
     Author Name:  Ashraful Islam
     Author URI: https://github.com/programmerashraful
     License: Update Letter
@@ -67,7 +67,7 @@ class CansoftPropertyTaxCalculator{
           'public' 		=> true,
           'has_archive' => true,
           'menu_icon' => 'dashicons-location-alt',
-          'supports'    => array( 'title',  ),
+          'supports'    => array( 'title'),
           'rewrite' 	=> array('slug' => 'cansoft_city')
         )
       );
