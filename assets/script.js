@@ -248,49 +248,92 @@
             $('#income_tax_calculator_provinces').html('');
             let selected = null;
             for (let index = 0; index < calculator_data.length; ++index) {
+                if(select && index == select){
+                    selected = 'selected="true"';
+                }else{
+                    selected = '';
+                }
                  $('#income_tax_calculator_provinces').append('<option value="'+index+'" ' +selected+ ' >' + calculator_data[index].province_name + '</option>');
             }
         }
         
         let calculator_all_data = $('#income_tax_calculator_all_data').val();
         calculator_all_data = JSON.parse(calculator_all_data);
-        lsitProvinces(calculator_all_data);
+        
+        let selected = $('#income_tax_selected_province').val();
+        if(selected==null  || selected==""){
+            selected = null;
+        }else{
+            selected = selected;
+        }
+        lsitProvinces(calculator_all_data, selected);
         
         
         
         
         //this function  render calculator constions and return total amount 
-        function renderConditionos(conditions, total_amount=0){
-            let data ={tax:0, amount_with_tax: 0};
+         async function  renderConditionos(conditions, original_amount=0){
+            let data = {tax:0, amount_with_tax: 0};
             
             for (let index = 0; index < conditions.length; ++index) {
                 let next_index = index+1;
+                
+                let amount_to_be_calculate = original_amount;
+                let calculated_amount = 0;
+                
                 let condition = conditions[index];
                 let condition_start_value = conditions[index].start;
                 let condition_start_parcent = conditions[index].parcent;
                 let condition_next_value =  (conditions[next_index] === undefined) ? 100000000000000000 : conditions[next_index].start;
-                console.log(condition_start_value);
+              
                 
                 let new_tax = 0;
-                if(total_amount >= condition_start_value){
+                if(amount_to_be_calculate >= condition_start_value){
+                    
+                    let new_calculate_amount =0;
+                    
+                    if(amount_to_be_calculate <= condition_next_value){
+                        
+                        new_calculate_amount = amount_to_be_calculate;
+                        calculated_amount += new_calculate_amount;
+                        amount_to_be_calculate -= new_calculate_amount;
+                        
+                        new_tax = (new_calculate_amount * condition_start_parcent) / 100;
+                        data.tax += new_tax;
+                        
+                    }else{
+                        new_calculate_amount = condition_next_value;
+                        calculated_amount += new_calculate_amount;
+                        amount_to_be_calculate -= new_calculate_amount;
+                        
+                        new_tax = (new_calculate_amount * condition_start_parcent) / 100;
+                        data.tax += new_tax;
+                    }
                     
                 }else{
-                    new_tax = (total_amount * condition_start_parcent) / 100;
+                    new_tax = (amount_to_be_calculate * condition_start_parcent) / 100;
                     data.tax += new_tax;
                     break;
                 }
                 
             }
             
+            data.amount_with_tax = original_amount + data.tax;
+            
+            return data;
+            
         }
         
-        function IncomeTaxCanadacalculator(){
+        async function IncomeTaxCanadacalculator(){
             let amount = $('#incomeTaxCalculatorCanada #original_amount').val();
             amount = Number(amount);
             let province_id = $('#income_tax_calculator_provinces').val();
             
             let conditions = calculator_all_data[province_id].conditions;
-            renderConditionos(conditions, amount);
+            let calculatedData =  await renderConditionos(conditions, amount);
+            console.log(calculatedData);
+            $('.incomTaxResultTax').html('$' + calculatedData.tax);
+            $('.incomTaxResultTaxTotal').html('$' + calculatedData.amount_with_tax);
         }
         
         

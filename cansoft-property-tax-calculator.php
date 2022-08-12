@@ -217,4 +217,5 @@ register_deactivation_hook( __FILE__, array($taxCalculator, 'deactivate'));
 include( plugin_dir_path( __FILE__ ) . 'custom-meta-box.php');
 include( plugin_dir_path( __FILE__ ) . 'short-code.php');
 include( plugin_dir_path( __FILE__ ) . 'short-code-inflauation-calculator.php');
+include( plugin_dir_path( __FILE__ ) . 'short-code-income-tax-calculator.php');
 
