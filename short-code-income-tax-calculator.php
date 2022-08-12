@@ -130,7 +130,7 @@ function candaIncomeTaxCalculator($atts){
 	), $atts, 'canada-income-tax-calculator' ) );
     
     $d_none = '';
-    if($selected){
+    if($selected or $selected==0){
         $d_none = 'style="display:none"';
     }
     $data=null;
