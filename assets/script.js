@@ -235,5 +235,81 @@
 
         
     });
+    
+    
+    //Income Tax Calculator Canada
+    $(document).ready(function(){
+        
+        if(!$("#incomeTaxCalculatorCanada").length){
+            return;
+        }
+        
+        function lsitProvinces(calculator_data=null, select=null){
+            $('#income_tax_calculator_provinces').html('');
+            let selected = null;
+            for (let index = 0; index < calculator_data.length; ++index) {
+                 $('#income_tax_calculator_provinces').append('<option value="'+index+'" ' +selected+ ' >' + calculator_data[index].province_name + '</option>');
+            }
+        }
+        
+        let calculator_all_data = $('#income_tax_calculator_all_data').val();
+        calculator_all_data = JSON.parse(calculator_all_data);
+        lsitProvinces(calculator_all_data);
+        
+        
+        
+        
+        //this function  render calculator constions and return total amount 
+        function renderConditionos(conditions, total_amount=0){
+            let data ={tax:0, amount_with_tax: 0};
+            
+            for (let index = 0; index < conditions.length; ++index) {
+                let next_index = index+1;
+                let condition = conditions[index];
+                let condition_start_value = conditions[index].start;
+                let condition_start_parcent = conditions[index].parcent;
+                let condition_next_value =  (conditions[next_index] === undefined) ? 100000000000000000 : conditions[next_index].start;
+                console.log(condition_start_value);
+                
+                let new_tax = 0;
+                if(total_amount >= condition_start_value){
+                    
+                }else{
+                    new_tax = (total_amount * condition_start_parcent) / 100;
+                    data.tax += new_tax;
+                    break;
+                }
+                
+            }
+            
+        }
+        
+        function IncomeTaxCanadacalculator(){
+            let amount = $('#incomeTaxCalculatorCanada #original_amount').val();
+            amount = Number(amount);
+            let province_id = $('#income_tax_calculator_provinces').val();
+            
+            let conditions = calculator_all_data[province_id].conditions;
+            renderConditionos(conditions, amount);
+        }
+        
+        
+        
+        
+        $('#income_tax_calculator_provinces').on('change', function() {
+            IncomeTaxCanadacalculator();
+        });
+        $('#incomeTaxCalculatorCanada #original_amount').on('change', function() {
+            IncomeTaxCanadacalculator();
+        });
+        $('#incomeTaxCalculatorSubmit').on('click', function() {
+            IncomeTaxCanadacalculator();
+        });
+        $("#incomeTaxCalculatorCanada #original_amount").keyup(function(){
+          IncomeTaxCanadacalculator();
+        });
+
+        
+    });
      
 })(jQuery);
